@@ -94,6 +94,8 @@ room_t *createRoom(msg_create_room *m, unsigned int id)
     r->numPlayers = m->numPlayers;
     r->id = id;
 
+    r->gameStates = malloc(sizeof(STATE*) * r->numPlayers);
+
     memset(r->players, 0, sizeof(uint32_t) * MAX_PLAYERS);
 
     /* Generate the random public ids, these will likely

@@ -159,6 +159,7 @@ void idler_task(uv_idle_t *handle)
             /* For now this is totally bogus, just randomly
              * generating a tetrad for every player in the
              * room */ 
+            
             for (i = 0; i < r->numPlayers; ++i) {
                 if (r->gameStates[i]) {
                     timeDiff = r->gameStates[i]->lastUpdate - time(NULL);

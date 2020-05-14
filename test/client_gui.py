@@ -2,9 +2,12 @@
 import sys, random
 import queue
 import time
-from PySide import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from ntetrislib import *
 from client_unit import *
+
+QtCore.Signal = QtCore.pyqtSignal
+QtCore.Slot = QtCore.pyqtSlot
 
 class Communicate(QtCore.QObject):
     
@@ -34,7 +37,7 @@ class NetworkThread (QtCore.QThread):
     def getQueues(self):
         return (self.g_tetradMsgQ, self.g_clientMsgQ, self.g_stateMsgQ)
     
-class Tetris(QtGui.QMainWindow):
+class Tetris(QtWidgets.QMainWindow):
     
     def __init__(self):
         
@@ -59,13 +62,13 @@ class Tetris(QtGui.QMainWindow):
 
     def center(self):
         
-        screen = QtGui.QDesktopWidget().screenGeometry()
+        screen = QtWidgets.QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move((screen.width()-size.width())/2, 
             (screen.height()-size.height())/2)
 
 
-class Board(QtGui.QFrame):
+class Board(QtWidgets.QFrame):
     
     BoardWidth = 10
     BoardHeight = 22
@@ -161,7 +164,7 @@ class Board(QtGui.QFrame):
     def keyPressEvent(self, event):
         
         if not self.isStarted or self.curPiece.shape() == Tetrominoes.NoShape:
-            QtGui.QWidget.keyPressEvent(self, event)
+            QtWidgets.QWidget.keyPressEvent(self, event)
             return
 
         key = event.key()
@@ -184,7 +187,7 @@ class Board(QtGui.QFrame):
         elif key == QtCore.Qt.Key_D:
             self.oneLineDown()
         else:
-            QtGui.QWidget.keyPressEvent(self, event)
+            QtWidgets.QWidget.keyPressEvent(self, event)
 
     def timerEvent(self, event):
         
@@ -195,7 +198,7 @@ class Board(QtGui.QFrame):
             else:
                 self.oneLineDown()
         else:
-            QtGui.QFrame.timerEvent(self, event)
+            QtWidgets.QFrame.timerEvent(self, event)
 
     def clearBoard(self):
         
@@ -414,7 +417,7 @@ class Shape(object):
         if self.pieceShape == Tetrominoes.SquareShape:
             return self
 
-        result = Shape()
+        result = Shape(None)
         result.pieceShape = self.pieceShape
         
         for i in range(4):
@@ -428,7 +431,7 @@ class Shape(object):
         if self.pieceShape == Tetrominoes.SquareShape:
             return self
 
-        result = Shape()
+        result = Shape(None)
         result.pieceShape = self.pieceShape
         
         for i in range(4):
@@ -437,7 +440,7 @@ class Shape(object):
 
         return result
 def main():    
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     t = Tetris()
     t.show()
     sys.exit(app.exec_())
